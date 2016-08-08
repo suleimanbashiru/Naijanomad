@@ -1,0 +1,39 @@
+/* YOUR CUSTOM STYLES */
+ p {
+    color:white;
+      font-family: cursive; 
+}
+
+h6,h4 {
+    color: white;
+    font-family: cursive;
+}
+
+#right {
+    text-align: right;
+    margin-left: 100px;
+}
+
+ul {
+    font-size: 20px;
+}
+
+#collapseEx2 {
+    margin-left: 450px;
+
+}
+
+.nav-link {
+    font-size: 15px;
+    font-family: proxima-nova;
+    font-weight: 600;
+    color: #a8a4a0;
+}
+
+.fa fa-book right {
+    width: 800px;
+    height: 500px;
+}
+h2 {
+    font-weight: bold;
+}
