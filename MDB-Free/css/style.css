@@ -52,4 +52,16 @@ h2 {
       
   }  
     
-    
+
+  .navbar-brand {
+      margin-left: 500px;
+      font-size:30px;
+      font-weight:bold;
+      font-family: 'Product Sans', Arial, sans-serif;
+  }
+
+  .h2-responsive {
+      font-family: 'Product Sans', Arial, sans-serif;
+      font-size:40px;
+      font-weight:500px;
+  }
