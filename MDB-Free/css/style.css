@@ -1,4 +1,26 @@
 /* YOUR CUSTOM STYLES */
+body {
+    /* background: url("pattern-dotted-background.jpg"); */
+    background-size: cover;
+    background-repeat: no-repeat;
+}
+
+
+.navbar-brand {
+    margin-left: 500px;
+    font-size: 30px;
+    font-weight: bold;
+    font-family: 'Product Sans', Arial, sans-serif;
+
+}
+
+.h2-responsive {
+    font-family: 'Product Sans', Arial, sans-serif;
+    font-size: 40px;
+    font-weight: 500px;
+}
+
+
  p {
     color:white;
       font-family: cursive; 
@@ -46,22 +68,3 @@ h2 {
     position: relative;
     }
     
-
-  body {
-      background: url("pattern-dotted-background.jpg");
-      
-  }  
-    
-
-  .navbar-brand {
-      margin-left: 500px;
-      font-size:30px;
-      font-weight:bold;
-      font-family: 'Product Sans', Arial, sans-serif;
-  }
-
-  .h2-responsive {
-      font-family: 'Product Sans', Arial, sans-serif;
-      font-size:40px;
-      font-weight:500px;
-  }
