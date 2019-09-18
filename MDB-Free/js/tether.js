@@ -1,30 +1,45 @@
 /*! tether 1.2.0 */
 
-(function(root, factory) {
+(function (root, factory) {
   if (typeof define === 'function' && define.amd) {
     define(factory);
-  }
-  else if (typeof exports === 'object') {
+  } else if (typeof exports === 'object') {
     module.exports = factory(require, exports, module);
-  }
-  else {
+  } else {
     root.Tether = factory();
   }
-}(this, function(require, exports, module) {
+}(this, function (require, exports, module) {
 
   'use strict';
 
-  var _createClass = (function() {
-    function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i];
+  var _createClass = (function () {
+    function defineProperties(target, props) {
+      for (var i = 0; i < props.length; i++) {
+        var descriptor = props[i];
         descriptor.enumerable = descriptor.enumerable || false;
-        descriptor.configurable = true; if ('value' in descriptor) descriptor.writable = true;
-        Object.defineProperty(target, descriptor.key, descriptor); } } return function(Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
+        descriptor.configurable = true;
+        if ('value' in descriptor) descriptor.writable = true;
+        Object.defineProperty(target, descriptor.key, descriptor);
+      }
+    }
+    return function (Constructor, protoProps, staticProps) {
+      if (protoProps) defineProperties(Constructor.prototype, protoProps);
+      if (staticProps) defineProperties(Constructor, staticProps);
+      return Constructor;
+    };
+  })();
 
-  function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
+  function _classCallCheck(instance, Constructor) {
+    if (!(instance instanceof Constructor)) {
+      throw new TypeError('Cannot call a class as a function');
+    }
+  }
 
   var TetherBase = undefined;
   if (typeof TetherBase === 'undefined') {
-    TetherBase = { modules: [] };
+    TetherBase = {
+      modules: []
+    };
   }
 
   function getScrollParent(el) {
@@ -42,8 +57,7 @@
       var style = undefined;
       try {
         style = getComputedStyle(parent);
-      }
-      catch (err) {}
+      } catch (err) {}
 
       if (typeof style === 'undefined' || style === null) {
         return parent;
@@ -64,9 +78,9 @@
     return document.body;
   }
 
-  var uniqueId = (function() {
+  var uniqueId = (function () {
     var id = 0;
-    return function() {
+    return function () {
       return ++id;
     };
   })();
@@ -103,7 +117,7 @@
       }
 
       // Clear the cache when this position call is done
-      defer(function() {
+      defer(function () {
         delete zeroPosCache[id];
       });
     }
@@ -116,8 +130,7 @@
     if (el === document) {
       doc = document;
       el = document.documentElement;
-    }
-    else {
+    } else {
       doc = el.ownerDocument;
     }
 
@@ -188,7 +201,10 @@
 
     var width = widthContained - widthScroll;
 
-    return { width: width, height: width };
+    return {
+      width: width,
+      height: width
+    };
   }
 
   function extend() {
@@ -198,7 +214,7 @@
 
     Array.prototype.push.apply(args, arguments);
 
-    args.slice(1).forEach(function(obj) {
+    args.slice(1).forEach(function (obj) {
       if (obj) {
         for (var key in obj) {
           if (({}).hasOwnProperty.call(obj, key)) {
@@ -213,13 +229,12 @@
 
   function removeClass(el, name) {
     if (typeof el.classList !== 'undefined') {
-      name.split(' ').forEach(function(cls) {
+      name.split(' ').forEach(function (cls) {
         if (cls.trim()) {
           el.classList.remove(cls);
         }
       });
-    }
-    else {
+    } else {
       var regex = new RegExp('(^| )' + name.split(' ').join('|') + '( |$)', 'gi');
       var className = getClassName(el).replace(regex, ' ');
       setClassName(el, className);
@@ -228,13 +243,12 @@
 
   function addClass(el, name) {
     if (typeof el.classList !== 'undefined') {
-      name.split(' ').forEach(function(cls) {
+      name.split(' ').forEach(function (cls) {
         if (cls.trim()) {
           el.classList.add(cls);
         }
       });
-    }
-    else {
+    } else {
       removeClass(el, name);
       var cls = getClassName(el) + (' ' + name);
       setClassName(el, cls);
@@ -263,13 +277,13 @@
   function updateClasses(el, add, all) {
     // Of the set of 'all' classes, we need the 'add' classes, and only the
     // 'add' classes to be set.
-    all.forEach(function(cls) {
+    all.forEach(function (cls) {
       if (add.indexOf(cls) === -1 && hasClass(el, cls)) {
         removeClass(el, cls);
       }
     });
 
-    add.forEach(function(cls) {
+    add.forEach(function (cls) {
       if (!hasClass(el, cls)) {
         addClass(el, cls);
       }
@@ -289,7 +303,7 @@
     }
   };
 
-  var Evented = (function() {
+  var Evented = (function () {
     function Evented() {
       _classCallCheck(this, Evented);
     }
@@ -305,7 +319,11 @@
         if (typeof this.bindings[event] === 'undefined') {
           this.bindings[event] = [];
         }
-        this.bindings[event].push({ handler: handler, ctx: ctx, once: once });
+        this.bindings[event].push({
+          handler: handler,
+          ctx: ctx,
+          once: once
+        });
       }
     }, {
       key: 'once',
@@ -321,14 +339,12 @@
 
         if (typeof handler === 'undefined') {
           delete this.bindings[event];
-        }
-        else {
+        } else {
           var i = 0;
           while (i < this.bindings[event].length) {
             if (this.bindings[event][i].handler === handler) {
               this.bindings[event].splice(i, 1);
-            }
-            else {
+            } else {
               ++i;
             }
           }
@@ -359,8 +375,7 @@
 
             if (once) {
               this.bindings[event].splice(i, 1);
-            }
-            else {
+            } else {
               ++i;
             }
           }
@@ -390,17 +405,62 @@
 
   'use strict';
 
-  var _slicedToArray = (function() {
-    function sliceIterator(arr, i) { var _arr = []; var _n = true; var _d = false; var _e = undefined; try { for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true;
-        _e = err; } finally { try { if (!_n && _i['return']) _i['return'](); } finally { if (_d) throw _e; } } return _arr; } return function(arr, i) { if (Array.isArray(arr)) { return arr; } else if (Symbol.iterator in Object(arr)) { return sliceIterator(arr, i); } else { throw new TypeError('Invalid attempt to destructure non-iterable instance'); } }; })();
+  var _slicedToArray = (function () {
+    function sliceIterator(arr, i) {
+      var _arr = [];
+      var _n = true;
+      var _d = false;
+      var _e = undefined;
+      try {
+        for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) {
+          _arr.push(_s.value);
+          if (i && _arr.length === i) break;
+        }
+      } catch (err) {
+        _d = true;
+        _e = err;
+      } finally {
+        try {
+          if (!_n && _i['return']) _i['return']();
+        } finally {
+          if (_d) throw _e;
+        }
+      }
+      return _arr;
+    }
+    return function (arr, i) {
+      if (Array.isArray(arr)) {
+        return arr;
+      } else if (Symbol.iterator in Object(arr)) {
+        return sliceIterator(arr, i);
+      } else {
+        throw new TypeError('Invalid attempt to destructure non-iterable instance');
+      }
+    };
+  })();
 
-  var _createClass = (function() {
-    function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i];
+  var _createClass = (function () {
+    function defineProperties(target, props) {
+      for (var i = 0; i < props.length; i++) {
+        var descriptor = props[i];
         descriptor.enumerable = descriptor.enumerable || false;
-        descriptor.configurable = true; if ('value' in descriptor) descriptor.writable = true;
-        Object.defineProperty(target, descriptor.key, descriptor); } } return function(Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
+        descriptor.configurable = true;
+        if ('value' in descriptor) descriptor.writable = true;
+        Object.defineProperty(target, descriptor.key, descriptor);
+      }
+    }
+    return function (Constructor, protoProps, staticProps) {
+      if (protoProps) defineProperties(Constructor.prototype, protoProps);
+      if (staticProps) defineProperties(Constructor, staticProps);
+      return Constructor;
+    };
+  })();
 
-  function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
+  function _classCallCheck(instance, Constructor) {
+    if (!(instance instanceof Constructor)) {
+      throw new TypeError('Cannot call a class as a function');
+    }
+  }
 
   if (typeof TetherBase === 'undefined') {
     throw new Error('You must include the utils.js file before tether.js');
@@ -424,7 +484,7 @@
     return a + diff >= b && b >= a - diff;
   }
 
-  var transformKey = (function() {
+  var transformKey = (function () {
     if (typeof document === 'undefined') {
       return '';
     }
@@ -442,7 +502,7 @@
   var tethers = [];
 
   var position = function position() {
-    tethers.forEach(function(tether) {
+    tethers.forEach(function (tether) {
       tether.position(false);
     });
     flush();
@@ -455,7 +515,7 @@
     return +new Date();
   }
 
-  (function() {
+  (function () {
     var lastCall = null;
     var lastDuration = null;
     var pendingTimeout = null;
@@ -486,7 +546,7 @@
     };
 
     if (typeof window !== 'undefined') {
-      ['resize', 'scroll', 'touchmove'].forEach(function(event) {
+      ['resize', 'scroll', 'touchmove'].forEach(function (event) {
         window.addEventListener(event, tick);
       });
     }
@@ -525,7 +585,10 @@
       top = MIRROR_TB[relativeToAttachment.top];
     }
 
-    return { left: left, top: top };
+    return {
+      left: left,
+      top: top
+    };
   };
 
   var attachmentToOffset = function attachmentToOffset(attachment) {
@@ -540,17 +603,23 @@
       top = OFFSET_MAP[attachment.top];
     }
 
-    return { left: left, top: top };
+    return {
+      left: left,
+      top: top
+    };
   };
 
   function addOffset() {
-    var out = { top: 0, left: 0 };
+    var out = {
+      top: 0,
+      left: 0
+    };
 
     for (var _len = arguments.length, offsets = Array(_len), _key = 0; _key < _len; _key++) {
       offsets[_key] = arguments[_key];
     }
 
-    offsets.forEach(function(_ref) {
+    offsets.forEach(function (_ref) {
       var top = _ref.top;
       var left = _ref.left;
 
@@ -587,11 +656,14 @@
     var top = _value$split2[0];
     var left = _value$split2[1];
 
-    return { top: top, left: left };
+    return {
+      top: top,
+      left: left
+    };
   };
   var parseAttachment = parseOffset;
 
-  var TetherClass = (function() {
+  var TetherClass = (function () {
     function TetherClass(options) {
       var _this = this;
 
@@ -605,7 +677,7 @@
 
       this.setOptions(options, false);
 
-      TetherBase.modules.forEach(function(module) {
+      TetherBase.modules.forEach(function (module) {
         if (typeof module.initialize !== 'undefined') {
           module.initialize.call(_this);
         }
@@ -622,11 +694,9 @@
 
         if (typeof classes !== 'undefined' && classes[key]) {
           return this.options.classes[key];
-        }
-        else if (this.options.classPrefix) {
+        } else if (this.options.classPrefix) {
           return this.options.classPrefix + '-' + key;
-        }
-        else {
+        } else {
           return key;
         }
       }
@@ -658,21 +728,19 @@
         if (this.target === 'viewport') {
           this.target = document.body;
           this.targetModifier = 'visible';
-        }
-        else if (this.target === 'scroll-handle') {
+        } else if (this.target === 'scroll-handle') {
           this.target = document.body;
           this.targetModifier = 'scroll-handle';
         }
 
-        ['element', 'target'].forEach(function(key) {
+        ['element', 'target'].forEach(function (key) {
           if (typeof _this2[key] === 'undefined') {
             throw new Error('Tether Error: Both element and target must be defined');
           }
 
           if (typeof _this2[key].jquery !== 'undefined') {
             _this2[key] = _this2[key][0];
-          }
-          else if (typeof _this2[key] === 'string') {
+          } else if (typeof _this2[key] === 'string') {
             _this2[key] = document.querySelector(_this2[key]);
           }
         });
@@ -697,8 +765,7 @@
 
         if (this.targetModifier === 'scroll-handle') {
           this.scrollParent = this.target;
-        }
-        else {
+        } else {
           this.scrollParent = getScrollParent(this.target);
         }
 
@@ -712,9 +779,13 @@
         if (typeof this.targetModifier !== 'undefined') {
           if (this.targetModifier === 'visible') {
             if (this.target === document.body) {
-              return { top: pageYOffset, left: pageXOffset, height: innerHeight, width: innerWidth };
-            }
-            else {
+              return {
+                top: pageYOffset,
+                left: pageXOffset,
+                height: innerHeight,
+                width: innerWidth
+              };
+            } else {
               var bounds = getBounds(this.target);
 
               var out = {
@@ -743,8 +814,7 @@
 
               return out;
             }
-          }
-          else if (this.targetModifier === 'scroll-handle') {
+          } else if (this.targetModifier === 'scroll-handle') {
             var bounds = undefined;
             var target = this.target;
             if (target === document.body) {
@@ -756,8 +826,7 @@
                 height: innerHeight,
                 width: innerWidth
               };
-            }
-            else {
+            } else {
               bounds = getBounds(target);
             }
 
@@ -796,8 +865,7 @@
 
             return out;
           }
-        }
-        else {
+        } else {
           return getBounds(this.target);
         }
       }
@@ -858,7 +926,7 @@
 
         this.disable();
 
-        tethers.forEach(function(tether, i) {
+        tethers.forEach(function (tether, i) {
           if (tether === _this3) {
             tethers.splice(i, 1);
             return;
@@ -900,12 +968,12 @@
         }
 
         var all = [];
-        sides.forEach(function(side) {
+        sides.forEach(function (side) {
           all.push(_this4.getClass('element-attached') + '-' + side);
           all.push(_this4.getClass('target-attached') + '-' + side);
         });
 
-        defer(function() {
+        defer(function () {
           if (!(typeof _this4._addAttachClasses !== 'undefined')) {
             return;
           }
@@ -939,7 +1007,7 @@
 
         this.updateAttachClasses(this.attachment, targetAttachment);
 
-        var elementPos = this.cache('element-bounds', function() {
+        var elementPos = this.cache('element-bounds', function () {
           return getBounds(_this5.element);
         });
 
@@ -953,21 +1021,29 @@
           // getting hidden.
           width = _lastSize.width;
           height = _lastSize.height;
-        }
-        else {
-          this.lastSize = { width: width, height: height };
+        } else {
+          this.lastSize = {
+            width: width,
+            height: height
+          };
         }
 
-        var targetPos = this.cache('target-bounds', function() {
+        var targetPos = this.cache('target-bounds', function () {
           return _this5.getTargetBounds();
         });
         var targetSize = targetPos;
 
         // Get an actual px offset from the attachment
-        var offset = offsetToPx(attachmentToOffset(this.attachment), { width: width, height: height });
+        var offset = offsetToPx(attachmentToOffset(this.attachment), {
+          width: width,
+          height: height
+        });
         var targetOffset = offsetToPx(attachmentToOffset(targetAttachment), targetSize);
 
-        var manualOffset = offsetToPx(this.offset, { width: width, height: height });
+        var manualOffset = offsetToPx(this.offset, {
+          width: width,
+          height: height
+        });
         var manualTargetOffset = offsetToPx(this.targetOffset, targetSize);
 
         // Add the manually provided offset
@@ -996,11 +1072,9 @@
 
           if (ret === false) {
             return false;
-          }
-          else if (typeof ret === 'undefined' || typeof ret !== 'object') {
+          } else if (typeof ret === 'undefined' || typeof ret !== 'object') {
             continue;
-          }
-          else {
+          } else {
             top = ret.top;
             left = ret.left;
           }
@@ -1044,18 +1118,18 @@
         }
 
         if (typeof this.options.optimizations !== 'undefined' && this.options.optimizations.moveElement !== false && !(typeof this.targetModifier !== 'undefined')) {
-          (function() {
-            var offsetParent = _this5.cache('target-offsetparent', function() {
+          (function () {
+            var offsetParent = _this5.cache('target-offsetparent', function () {
               return getOffsetParent(_this5.target);
             });
-            var offsetPosition = _this5.cache('target-offsetparent-bounds', function() {
+            var offsetPosition = _this5.cache('target-offsetparent-bounds', function () {
               return getBounds(offsetParent);
             });
             var offsetParentStyle = getComputedStyle(offsetParent);
             var offsetParentSize = offsetPosition;
 
             var offsetBorder = {};
-            ['Top', 'Left', 'Bottom', 'Right'].forEach(function(side) {
+            ['Top', 'Left', 'Bottom', 'Right'].forEach(function (side) {
               offsetBorder[side.toLowerCase()] = parseFloat(offsetParentStyle['border' + side + 'Width']);
             });
 
@@ -1129,7 +1203,12 @@
           }
         }
 
-        var css = { top: '', left: '', right: '', bottom: '' };
+        var css = {
+          top: '',
+          left: '',
+          right: '',
+          bottom: ''
+        };
 
         var transcribe = function transcribe(_same, _pos) {
           var hasOptimizations = typeof _this6.options.optimizations !== 'undefined';
@@ -1140,8 +1219,7 @@
             if (_same.top) {
               css.top = 0;
               yPos = _pos.top;
-            }
-            else {
+            } else {
               css.bottom = 0;
               yPos = -_pos.bottom;
             }
@@ -1149,8 +1227,7 @@
             if (_same.left) {
               css.left = 0;
               xPos = _pos.left;
-            }
-            else {
+            } else {
               css.right = 0;
               xPos = -_pos.right;
             }
@@ -1162,19 +1239,16 @@
               // but IE9 doesn't support 3d transforms and will choke.
               css[transformKey] += " translateZ(0)";
             }
-          }
-          else {
+          } else {
             if (_same.top) {
               css.top = _pos.top + 'px';
-            }
-            else {
+            } else {
               css.bottom = _pos.bottom + 'px';
             }
 
             if (_same.left) {
               css.left = _pos.left + 'px';
-            }
-            else {
+            } else {
               css.right = _pos.right + 'px';
             }
           }
@@ -1184,20 +1258,18 @@
         if ((same.page.top || same.page.bottom) && (same.page.left || same.page.right)) {
           css.position = 'absolute';
           transcribe(same.page, pos.page);
-        }
-        else if ((same.viewport.top || same.viewport.bottom) && (same.viewport.left || same.viewport.right)) {
+        } else if ((same.viewport.top || same.viewport.bottom) && (same.viewport.left || same.viewport.right)) {
           css.position = 'fixed';
           transcribe(same.viewport, pos.viewport);
-        }
-        else if (typeof same.offset !== 'undefined' && same.offset.top && same.offset.left) {
-          (function() {
+        } else if (typeof same.offset !== 'undefined' && same.offset.top && same.offset.left) {
+          (function () {
             css.position = 'absolute';
-            var offsetParent = _this6.cache('target-offsetparent', function() {
+            var offsetParent = _this6.cache('target-offsetparent', function () {
               return getOffsetParent(_this6.target);
             });
 
             if (getOffsetParent(_this6.element) !== offsetParent) {
-              defer(function() {
+              defer(function () {
                 _this6.element.parentNode.removeChild(_this6.element);
                 offsetParent.appendChild(_this6.element);
               });
@@ -1206,10 +1278,12 @@
             transcribe(same.offset, pos.offset);
             moved = true;
           })();
-        }
-        else {
+        } else {
           css.position = 'absolute';
-          transcribe({ top: true, left: true }, pos.page);
+          transcribe({
+            top: true,
+            left: true
+          }, pos.page);
         }
 
         if (!moved) {
@@ -1249,7 +1323,7 @@
         }
 
         if (write) {
-          defer(function() {
+          defer(function () {
             extend(_this6.element.style, writeCSS);
           });
         }
@@ -1268,9 +1342,39 @@
 
   'use strict';
 
-  var _slicedToArray = (function() {
-    function sliceIterator(arr, i) { var _arr = []; var _n = true; var _d = false; var _e = undefined; try { for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true;
-        _e = err; } finally { try { if (!_n && _i['return']) _i['return'](); } finally { if (_d) throw _e; } } return _arr; } return function(arr, i) { if (Array.isArray(arr)) { return arr; } else if (Symbol.iterator in Object(arr)) { return sliceIterator(arr, i); } else { throw new TypeError('Invalid attempt to destructure non-iterable instance'); } }; })();
+  var _slicedToArray = (function () {
+    function sliceIterator(arr, i) {
+      var _arr = [];
+      var _n = true;
+      var _d = false;
+      var _e = undefined;
+      try {
+        for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) {
+          _arr.push(_s.value);
+          if (i && _arr.length === i) break;
+        }
+      } catch (err) {
+        _d = true;
+        _e = err;
+      } finally {
+        try {
+          if (!_n && _i['return']) _i['return']();
+        } finally {
+          if (_d) throw _e;
+        }
+      }
+      return _arr;
+    }
+    return function (arr, i) {
+      if (Array.isArray(arr)) {
+        return arr;
+      } else if (Symbol.iterator in Object(arr)) {
+        return sliceIterator(arr, i);
+      } else {
+        throw new TypeError('Invalid attempt to destructure non-iterable instance');
+      }
+    };
+  })();
 
   var _TetherBase$Utils = TetherBase.Utils;
   var getBounds = _TetherBase$Utils.getBounds;
@@ -1283,8 +1387,7 @@
   function getBoundingRect(tether, to) {
     if (to === 'scrollParent') {
       to = tether.scrollParent;
-    }
-    else if (to === 'window') {
+    } else if (to === 'window') {
       to = [pageXOffset, pageYOffset, innerWidth + pageXOffset, innerHeight + pageYOffset];
     }
 
@@ -1293,19 +1396,18 @@
     }
 
     if (typeof to.nodeType !== 'undefined') {
-      (function() {
+      (function () {
         var size = getBounds(to);
         var pos = size;
         var style = getComputedStyle(to);
 
         to = [pos.left, pos.top, size.width + pos.left, size.height + pos.top];
 
-        BOUNDS_FORMAT.forEach(function(side, i) {
+        BOUNDS_FORMAT.forEach(function (side, i) {
           side = side[0].toUpperCase() + side.substr(1);
           if (side === 'Top' || side === 'Left') {
             to[i] += parseFloat(style['border' + side + 'Width']);
-          }
-          else {
+          } else {
             to[i] -= parseFloat(style['border' + side + 'Width']);
           }
         });
@@ -1327,7 +1429,7 @@
         return true;
       }
 
-      var _cache = this.cache('element-bounds', function() {
+      var _cache = this.cache('element-bounds', function () {
         return getBounds(_this.element);
       });
 
@@ -1343,7 +1445,7 @@
         height = _lastSize.height;
       }
 
-      var targetSize = this.cache('target-bounds', function() {
+      var targetSize = this.cache('target-bounds', function () {
         return _this.getTargetBounds();
       });
 
@@ -1352,7 +1454,7 @@
 
       var allClasses = [this.getClass('pinned'), this.getClass('out-of-bounds')];
 
-      this.options.constraints.forEach(function(constraint) {
+      this.options.constraints.forEach(function (constraint) {
         var outOfBoundsClass = constraint.outOfBoundsClass;
         var pinnedClass = constraint.pinnedClass;
 
@@ -1364,8 +1466,8 @@
         }
       });
 
-      allClasses.forEach(function(cls) {
-        ['left', 'top', 'right', 'bottom'].forEach(function(side) {
+      allClasses.forEach(function (cls) {
+        ['left', 'top', 'right', 'bottom'].forEach(function (side) {
           allClasses.push(cls + '-' + side);
         });
       });
@@ -1375,7 +1477,7 @@
       var tAttachment = extend({}, targetAttachment);
       var eAttachment = extend({}, this.attachment);
 
-      this.options.constraints.forEach(function(constraint) {
+      this.options.constraints.forEach(function (constraint) {
         var to = constraint.to;
         var attachment = constraint.attachment;
         var pin = constraint.pin;
@@ -1393,8 +1495,7 @@
 
           changeAttachY = _attachment$split2[0];
           changeAttachX = _attachment$split2[1];
-        }
-        else {
+        } else {
           changeAttachX = changeAttachY = attachment;
         }
 
@@ -1420,8 +1521,7 @@
 
               top += height;
               eAttachment.top = 'top';
-            }
-            else if (eAttachment.top === 'top') {
+            } else if (eAttachment.top === 'top') {
               top += targetHeight;
               tAttachment.top = 'bottom';
 
@@ -1437,8 +1537,7 @@
 
               top -= height;
               eAttachment.top = 'bottom';
-            }
-            else if (eAttachment.top === 'bottom') {
+            } else if (eAttachment.top === 'bottom') {
               top -= targetHeight;
               tAttachment.top = 'top';
 
@@ -1451,8 +1550,7 @@
             if (top + height > bounds[3] && eAttachment.top === 'top') {
               top -= height;
               eAttachment.top = 'bottom';
-            }
-            else if (top < bounds[1] && eAttachment.top === 'bottom') {
+            } else if (top < bounds[1] && eAttachment.top === 'bottom') {
               top += height;
               eAttachment.top = 'top';
             }
@@ -1479,37 +1577,32 @@
 
               left += width;
               eAttachment.left = 'left';
-            }
-            else if (eAttachment.left === 'left') {
+            } else if (eAttachment.left === 'left') {
               left += targetWidth;
               tAttachment.left = 'right';
 
               left -= width;
               eAttachment.left = 'right';
             }
-          }
-          else if (left + width > bounds[2] && tAttachment.left === 'right') {
+          } else if (left + width > bounds[2] && tAttachment.left === 'right') {
             if (eAttachment.left === 'left') {
               left -= targetWidth;
               tAttachment.left = 'left';
 
               left -= width;
               eAttachment.left = 'right';
-            }
-            else if (eAttachment.left === 'right') {
+            } else if (eAttachment.left === 'right') {
               left -= targetWidth;
               tAttachment.left = 'left';
 
               left += width;
               eAttachment.left = 'left';
             }
-          }
-          else if (tAttachment.left === 'center') {
+          } else if (tAttachment.left === 'center') {
             if (left + width > bounds[2] && eAttachment.left === 'left') {
               left -= width;
               eAttachment.left = 'right';
-            }
-            else if (left < bounds[0] && eAttachment.left === 'right') {
+            } else if (left < bounds[0] && eAttachment.left === 'right') {
               left += width;
               eAttachment.left = 'left';
             }
@@ -1533,8 +1626,7 @@
             if (eAttachment.left === 'right') {
               left += width;
               eAttachment.left = 'left';
-            }
-            else if (eAttachment.left === 'center') {
+            } else if (eAttachment.left === 'center') {
               left += width / 2;
               eAttachment.left = 'left';
             }
@@ -1544,8 +1636,7 @@
             if (eAttachment.left === 'left') {
               left -= width;
               eAttachment.left = 'right';
-            }
-            else if (eAttachment.left === 'center') {
+            } else if (eAttachment.left === 'center') {
               left -= width / 2;
               eAttachment.left = 'right';
             }
@@ -1553,11 +1644,10 @@
         }
 
         if (typeof pin === 'string') {
-          pin = pin.split(',').map(function(p) {
+          pin = pin.split(',').map(function (p) {
             return p.trim();
           });
-        }
-        else if (pin === true) {
+        } else if (pin === true) {
           pin = ['top', 'left', 'right', 'bottom'];
         }
 
@@ -1570,8 +1660,7 @@
           if (pin.indexOf('top') >= 0) {
             top = bounds[1];
             pinned.push('top');
-          }
-          else {
+          } else {
             oob.push('top');
           }
         }
@@ -1580,8 +1669,7 @@
           if (pin.indexOf('bottom') >= 0) {
             top = bounds[3] - height;
             pinned.push('bottom');
-          }
-          else {
+          } else {
             oob.push('bottom');
           }
         }
@@ -1590,8 +1678,7 @@
           if (pin.indexOf('left') >= 0) {
             left = bounds[0];
             pinned.push('left');
-          }
-          else {
+          } else {
             oob.push('left');
           }
         }
@@ -1600,41 +1687,38 @@
           if (pin.indexOf('right') >= 0) {
             left = bounds[2] - width;
             pinned.push('right');
-          }
-          else {
+          } else {
             oob.push('right');
           }
         }
 
         if (pinned.length) {
-          (function() {
+          (function () {
             var pinnedClass = undefined;
             if (typeof _this.options.pinnedClass !== 'undefined') {
               pinnedClass = _this.options.pinnedClass;
-            }
-            else {
+            } else {
               pinnedClass = _this.getClass('pinned');
             }
 
             addClasses.push(pinnedClass);
-            pinned.forEach(function(side) {
+            pinned.forEach(function (side) {
               addClasses.push(pinnedClass + '-' + side);
             });
           })();
         }
 
         if (oob.length) {
-          (function() {
+          (function () {
             var oobClass = undefined;
             if (typeof _this.options.outOfBoundsClass !== 'undefined') {
               oobClass = _this.options.outOfBoundsClass;
-            }
-            else {
+            } else {
               oobClass = _this.getClass('out-of-bounds');
             }
 
             addClasses.push(oobClass);
-            oob.forEach(function(side) {
+            oob.forEach(function (side) {
               addClasses.push(oobClass + '-' + side);
             });
           })();
@@ -1652,14 +1736,17 @@
         }
       });
 
-      defer(function() {
+      defer(function () {
         if (!(_this.options.addTargetClasses === false)) {
           updateClasses(_this.target, addClasses, allClasses);
         }
         updateClasses(_this.element, addClasses, allClasses);
       });
 
-      return { top: top, left: left };
+      return {
+        top: top,
+        left: left
+      };
     }
   });
   /* globals TetherBase */
@@ -1678,7 +1765,7 @@
       var top = _ref.top;
       var left = _ref.left;
 
-      var _cache = this.cache('element-bounds', function() {
+      var _cache = this.cache('element-bounds', function () {
         return getBounds(_this.element);
       });
 
@@ -1692,7 +1779,7 @@
 
       var abutted = [];
       if (top <= targetPos.bottom && bottom >= targetPos.top) {
-        ['left', 'right'].forEach(function(side) {
+        ['left', 'right'].forEach(function (side) {
           var targetPosSide = targetPos[side];
           if (targetPosSide === left || targetPosSide === right) {
             abutted.push(side);
@@ -1701,7 +1788,7 @@
       }
 
       if (left <= targetPos.right && right >= targetPos.left) {
-        ['top', 'bottom'].forEach(function(side) {
+        ['top', 'bottom'].forEach(function (side) {
           var targetPosSide = targetPos[side];
           if (targetPosSide === top || targetPosSide === bottom) {
             abutted.push(side);
@@ -1714,7 +1801,7 @@
 
       var sides = ['left', 'top', 'right', 'bottom'];
       allClasses.push(this.getClass('abutted'));
-      sides.forEach(function(side) {
+      sides.forEach(function (side) {
         allClasses.push(_this.getClass('abutted') + '-' + side);
       });
 
@@ -1722,11 +1809,11 @@
         addClasses.push(this.getClass('abutted'));
       }
 
-      abutted.forEach(function(side) {
+      abutted.forEach(function (side) {
         addClasses.push(_this.getClass('abutted') + '-' + side);
       });
 
-      defer(function() {
+      defer(function () {
         if (!(_this.options.addTargetClasses === false)) {
           updateClasses(_this.target, addClasses, allClasses);
         }
@@ -1740,9 +1827,39 @@
 
   'use strict';
 
-  var _slicedToArray = (function() {
-    function sliceIterator(arr, i) { var _arr = []; var _n = true; var _d = false; var _e = undefined; try { for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true;
-        _e = err; } finally { try { if (!_n && _i['return']) _i['return'](); } finally { if (_d) throw _e; } } return _arr; } return function(arr, i) { if (Array.isArray(arr)) { return arr; } else if (Symbol.iterator in Object(arr)) { return sliceIterator(arr, i); } else { throw new TypeError('Invalid attempt to destructure non-iterable instance'); } }; })();
+  var _slicedToArray = (function () {
+    function sliceIterator(arr, i) {
+      var _arr = [];
+      var _n = true;
+      var _d = false;
+      var _e = undefined;
+      try {
+        for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) {
+          _arr.push(_s.value);
+          if (i && _arr.length === i) break;
+        }
+      } catch (err) {
+        _d = true;
+        _e = err;
+      } finally {
+        try {
+          if (!_n && _i['return']) _i['return']();
+        } finally {
+          if (_d) throw _e;
+        }
+      }
+      return _arr;
+    }
+    return function (arr, i) {
+      if (Array.isArray(arr)) {
+        return arr;
+      } else if (Symbol.iterator in Object(arr)) {
+        return sliceIterator(arr, i);
+      } else {
+        throw new TypeError('Invalid attempt to destructure non-iterable instance');
+      }
+    };
+  })();
 
   TetherBase.modules.push({
     position: function position(_ref) {
@@ -1755,7 +1872,10 @@
 
       var shift = this.options.shift;
       if (typeof this.options.shift === 'function') {
-        shift = this.options.shift.call(this, { top: top, left: left });
+        shift = this.options.shift.call(this, {
+          top: top,
+          left: left
+        });
       }
 
       var shiftTop = undefined,
@@ -1773,8 +1893,7 @@
 
         shiftTop = parseFloat(shiftTop, 10);
         shiftLeft = parseFloat(shiftLeft, 10);
-      }
-      else {
+      } else {
         shiftTop = shift.top;
         shiftLeft = shift.left;
       }
@@ -1782,7 +1901,10 @@
       top += shiftTop;
       left += shiftLeft;
 
-      return { top: top, left: left };
+      return {
+        top: top,
+        left: left
+      };
     }
   });
   return Tether;
