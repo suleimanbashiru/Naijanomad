@@ -3,14 +3,16 @@ body {
     /* background: url("pattern-dotted-background.jpg"); */
     background-size: cover;
     background-repeat: no-repeat;
+    background-color: #D2DBDD;
 }
 
 
 .navbar-brand {
-    margin-left: 500px;
+    /* margin-left: 500px; */
     font-size: 30px;
     font-weight: bold;
     font-family: 'Product Sans', Arial, sans-serif;
+    color: aliceblue;
 
 }
 
@@ -68,3 +70,25 @@ h2 {
     position: relative;
     }
     
+
+
+
+
+/*  */
+
+.topcard {
+    margin-top:70px; 
+    text-align:center;
+
+    }
+
+
+
+
+    
+   
+
+
+   
+
+   
